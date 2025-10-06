@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout - Glowify</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <h1 class="logo">Glowify</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cart.html">Cart</a>
+      <a href="login.html" id="login-link">Login</a>
+      <a href="register.html" id="register-link">Register</a>
+        <a href="wishlist.html" id="liked-items">❤️ Likes (0)</a>
+      <a href="#" id="logout-link" style="display:none;">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Checkout Section -->
+  <section class="checkout">
+    <h2>Checkout</h2>
+    <form id="checkout-form">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="address">Shipping Address</label>
+      <textarea id="address" name="address" rows="3" required></textarea>
+
+      <label for="payment">Payment Method</label>
+      <select id="payment" name="payment" required>
+        <option value="">Select</option>
+        <option value="cod">Cash on Delivery</option>
+        <option value="card">Credit/Debit Card</option>
+        <option value="upi">UPI</option>
+      </select>
+
+      <button type="submit">Place Order</button>
+    </form>
+  </section>
+
+  <script>
+    // Checkout form handler
+    document.getElementById('checkout-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const payment = document.getElementById('payment').value;
+
+      if (name && address && payment) {
+        alert('Order placed successfully!');
+        localStorage.removeItem('cart');
+        window.location.href = 'index.html';
+      } else {
+        alert('Please fill out all fields.');
+      }
+    });
+
+    // Navbar auth toggle
+    window.onload = function () {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      document.getElementById('login-link').style.display = isLoggedIn ? 'none' : 'inline';
+      document.getElementById('register-link').style.display = isLoggedIn ? 'none' : 'inline';
+      document.getElementById('logout-link').style.display = isLoggedIn ? 'inline' : 'none';
+
+      document.getElementById('logout-link').addEventListener('click', () => {
+        localStorage.setItem('isLoggedIn', 'false');
+        window.location.reload();
+      });
+    };
+  </script>
+</body>
+</html>

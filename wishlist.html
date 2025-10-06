@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wishlist - Glowify</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <h1 class="logo">Glowify</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="login.html" id="login-link">Login</a>
+      <a href="register.html" id="register-link">Register</a>
+      <a href="#" id="logout-link" style="display:none;">Logout</a>
+    </nav>
+  </header>
+
+  <section class="products">
+    <h2>Your Wishlist</h2>
+    <div class="product-grid" id="wishlist-container"></div>
+  </section>
+
+  <script>
+    function updateNavbarAuth() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      document.getElementById('login-link').style.display = isLoggedIn ? 'none' : 'inline';
+      document.getElementById('register-link').style.display = isLoggedIn ? 'none' : 'inline';
+      document.getElementById('logout-link').style.display = isLoggedIn ? 'inline' : 'none';
+
+      document.getElementById('logout-link').addEventListener('click', () => {
+        localStorage.setItem('isLoggedIn', 'false');
+        window.location.reload();
+      });
+    }
+
+    function renderWishlist() {
+      const likedItems = JSON.parse(localStorage.getItem('likedItems')) || [];
+      const container = document.getElementById('wishlist-container');
+      container.innerHTML = '';
+
+      if (likedItems.length === 0) {
+        container.innerHTML = '<p style="text-align:center;">Your wishlist is empty.</p>';
+        return;
+      }
+
+      likedItems.forEach((item, index) => {
+        const imageName = item.toLowerCase().replace(/\s+/g, '-') + '.jpg';
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <img src="images/${imageName}" alt="${item}">
+          <h3>${item}</h3>
+          <button onclick="removeFromWishlist(${index})">Remove</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function removeFromWishlist(index) {
+      const likedItems = JSON.parse(localStorage.getItem('likedItems')) || [];
+      likedItems.splice(index, 1);
+      localStorage.setItem('likedItems', JSON.stringify(likedItems));
+      renderWishlist();
+    }
+
+    window.onload = function () {
+      updateNavbarAuth();
+      renderWishlist();
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Glowify - Home</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <h1 class="logo">Glowify</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html" id="login-link">Login</a>
+      <a href="register.html" id="register-link">Register</a>
+      <a href="wishlist.html" id="liked-items">❤️ Likes (0)</a>
+      <a href="#" id="logout-link" style="display:none;">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h2>Enhance Your Natural Beauty</h2>
+    <p>Premium cosmetic products crafted to make you feel confident and radiant.</p>
+    <button onclick="window.location.href='shop.html'">Shop Now</button>
+  </section>
+
+  <!-- Who We Are Section -->
+  <section class="who-we-are">
+    <div class="who-we-are-content">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMflpPr1xbkmmQYJGO7CGktWX2G1ylYlXdLA&s" alt="Our Team" class="who-we-are-image">
+      <div class="who-we-are-text">
+        <h2>Who We Are</h2>
+        <p>Glowify is dedicated to helping you look and feel your best. Our team of beauty experts carefully curates products that enhance your natural features while maintaining skin health. We believe everyone deserves to glow with confidence.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section class="products">
+    <h2>Our Products</h2>
+    <div class="product-grid">
+      <div class="product-card">
+        <img src="https://beautbysterling.com/cdn/shop/files/Glossy_Lipstick_G13_Love_For_Pink_1.png?v=1738071398&width=1500" alt="Lipstick">
+        <h3>Lipstick</h3>
+        <p>₹25</p>
+        <button onclick="addToCart('Lipstick', 25)">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="https://artdeco.com/cdn/shop/files/img_product-3d95b9209ea62775e07b34a4bf0556e1.jpg?v=1726470933&width=1080" alt="Foundation">
+        <h3>Foundation</h3>
+        <p>₹40</p>
+        <button onclick="addToCart('Foundation', 40)">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="https://media.istockphoto.com/id/160992043/photo/close-up-of-moisturizer-in-jar.jpg?s=612x612&w=0&k=20&c=ulOzLugjRhRTpwlXavbo0q6fZCBqiD_AzojfrGVGUUA=" alt="Face Cream">
+        <h3>Face Cream</h3>
+        <p>₹30</p>
+        <button onclick="addToCart('Face Cream', 30)">Add to Cart</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact">
+    <h2>Contact Us</h2>
+    <p>Have questions? Fill out the form below and we’ll get back to you.</p>
+    
+    <form onsubmit="submitContact(event)">
+      <input type="text" id="contact-name" placeholder="Your Name" required>
+      <input type="email" id="contact-email" placeholder="Your Email" required>
+      <textarea id="contact-message" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+    
+    <p id="contact-response" style="color: green; font-weight: bold; margin-top: 10px;"></p>
+  </section>
+
+  <!-- Scripts -->
+  <script>
+    // Cart functionality
+    function addToCart(name, price) {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const existingItem = cart.find(item => item.name === name);
+
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({ name, price, quantity: 1 });
+      }
+
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert(`${name} added to cart!`);
+    }
+
+    // Contact form submission
+    function submitContact(event) {
+      event.preventDefault();
+      const name = document.getElementById('contact-name').value;
+      document.getElementById('contact-response').textContent = `Thanks, ${name}! We'll be in touch soon.`;
+      event.target.reset();
+    }
+
+    // Wishlist count
+    function updateLikedCount() {
+      const likedItems = JSON.parse(localStorage.getItem('likedItems')) || [];
+      document.getElementById('liked-items').textContent = `❤️ Likes (${likedItems.length})`;
+    }
+
+    // Navbar login/logout toggle
+    function updateNavbarAuth() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+      const loginLink = document.getElementById('login-link');
+      const registerLink = document.getElementById('register-link');
+      const logoutLink = document.getElementById('logout-link');
+
+      if (isLoggedIn) {
+        loginLink.style.display = 'none';
+        registerLink.style.display = 'none';
+        logoutLink.style.display = 'inline';
+      } else {
+        loginLink.style.display = 'inline';
+        registerLink.style.display = 'inline';
+        logoutLink.style.display = 'none';
+      }
+
+      logoutLink.addEventListener('click', () => {
+        localStorage.setItem('isLoggedIn', 'false');
+        window.location.reload();
+      });
+    }
+
+    // Initialize on page load
+    window.onload = function () {
+      updateLikedCount();
+      updateNavbarAuth();
+    };
+  </script>
+  <!-- Footer -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>Glowify</h3>
+      <p>Glow with confidence. Premium cosmetics for every skin type.</p>
+    </div>
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p>Email: support@glowify.com</p>
+      <p>Phone: +91 98765 43210</p>
+    </div>
+    <div class="footer-section">
+      <h4>Follow Us</h4>
+      <a href="#">Instagram</a> |
+      <a href="#">Facebook</a> |
+      <a href="#">Twitter</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 Glowify. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>

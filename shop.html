@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shop - Glowify</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <h1 class="logo">Glowify</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html" id="login-link">Login</a>
+      <a href="register.html" id="register-link">Register</a>
+        <a href="wishlist.html" id="liked-items">❤️ Likes (0)</a>
+      <a href="#" id="logout-link" style="display:none;">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Shop Products -->
+  <section class="products">
+    <h2>Shop All Products</h2>
+    <div class="product-grid">
+      <!-- Product Card: Lipstick -->
+      <div class="product-card">
+        <img src="https://beautbysterling.com/cdn/shop/files/Glossy_Lipstick_G13_Love_For_Pink_1.png?v=1738071398&width=1500" alt="Lipstick">
+        <h3>Lipstick</h3>
+        <p>₹25</p>
+        <button class="like-btn" onclick="toggleLike(this)">❤️</button>
+        <div class="quantity-controls">
+          <button onclick="changeQuantity(this, -1)">−</button>
+          <span class="quantity">1</span>
+          <button onclick="changeQuantity(this, 1)">+</button>
+        </div>
+        <button onclick="addToCart('Lipstick', 25, this)">Add to Cart</button>
+      </div>
+
+      <!-- Product Card: Foundation -->
+      <div class="product-card">
+        <img src="https://artdeco.com/cdn/shop/files/img_product-3d95b9209ea62775e07b34a4bf0556e1.jpg?v=1726470933&width=1080" alt="Foundation">
+        <h3>Foundation</h3>
+        <p>₹40</p>
+        <button class="like-btn" onclick="toggleLike(this)">❤️</button>
+        <div class="quantity-controls">
+          <button onclick="changeQuantity(this, -1)">−</button>
+          <span class="quantity">1</span>
+          <button onclick="changeQuantity(this, 1)">+</button>
+        </div>
+        <button onclick="addToCart('Foundation', 40, this)">Add to Cart</button>
+      </div>
+
+      <!-- Product Card: Face Cream -->
+      <div class="product-card">
+        <img src="https://media.istockphoto.com/id/160992043/photo/close-up-of-moisturizer-in-jar.jpg?s=612x612&w=0&k=20&c=ulOzLugjRhRTpwlXavbo0q6fZCBqiD_AzojfrGVGUUA=" alt="Face Cream">
+        <h3>Face Cream</h3>
+        <p>₹30</p>
+        <button class="like-btn" onclick="toggleLike(this)">❤️</button>
+        <div class="quantity-controls">
+          <button onclick="changeQuantity(this, -1)">−</button>
+          <span class="quantity">1</span>
+          <button onclick="changeQuantity(this, 1)">+</button>
+        </div>
+        <button onclick="addToCart('Face Cream', 30, this)">Add to Cart</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scripts -->
+  <script>
+    // Like button toggle
+    function toggleLike(button) {
+      button.classList.toggle('liked');
+      button.textContent = button.classList.contains('liked') ? '💖' : '❤️';
+    }
+
+    // Quantity controls
+    function changeQuantity(button, delta) {
+      const quantitySpan = button.parentElement.querySelector('.quantity');
+      let quantity = parseInt(quantitySpan.textContent);
+      quantity = Math.max(1, quantity + delta);
+      quantitySpan.textContent = quantity;
+    }
+
+    // Add to cart
+    function addToCart(name, price, button) {
+      const quantity = parseInt(button.parentElement.querySelector('.quantity').textContent);
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const existingItem = cart.find(item => item.name === name);
+
+      if (existingItem) {
+        existingItem.quantity += quantity;
+      } else {
+        cart.push({ name, price, quantity });
+      }
+
+      localStorage.setItem('cart', JSON.stringify(cart));
+      window.location.href = 'cart.html';
+    }
+
+    // Navbar login/logout toggle
+    function updateNavbarAuth() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+      const loginLink = document.getElementById('login-link');
+      const registerLink = document.getElementById('register-link');
+      const logoutLink = document.getElementById('logout-link');
+
+      if (isLoggedIn) {
+        loginLink.style.display = 'none';
+        registerLink.style.display = 'none';
+        logoutLink.style.display = 'inline';
+      } else {
+        loginLink.style.display = 'inline';
+        registerLink.style.display = 'inline';
+        logoutLink.style.display = 'none';
+      }
+
+      logoutLink.addEventListener('click', () => {
+        localStorage.setItem('isLoggedIn', 'false');
+        window.location.reload();
+      });
+    }
+
+    // Initialize on page load
+    window.onload = function () {
+      updateNavbarAuth();
+    };
+  </script>
+</body>
+</html>
